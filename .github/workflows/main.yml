@@ -34,7 +34,6 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
-        continue-on-error: true  # Permet d'ignorer les erreurs de lint si tu veux auto-commiter les changements
 
       - name: Commit lint fixes (if any)
         if: success() && steps.lint.outcome == 'failure'
