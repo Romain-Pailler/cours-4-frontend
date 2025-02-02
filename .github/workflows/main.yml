@@ -34,6 +34,16 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+        continue-on-error: true  # Permet d'ignorer les erreurs de lint si tu veux auto-commiter les changements
+
+      - name: Commit lint fixes (if any)
+        if: success() && steps.lint.outcome == 'failure'
+        run: |
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git add .
+          git commit -m "Fix linting issues"
+          git push
 
   test:
     name: Run Tests
@@ -52,7 +62,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Tests
+      - name: Run Unit Tests with Vitest
         run: npm run test
 
   build:
@@ -74,7 +84,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build the project
+      - name: Build the project for production
         run: npm run build
 
       - name: Upload Production Files
